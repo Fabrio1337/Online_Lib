@@ -36,7 +36,7 @@ public class Main extends Application {
         //установливание сцены на подмостки
         onlineLibrary.setScene(libraryScene);
 
-        
+
         Stage profileStage = new Stage(); // подмосток для окна профиля
 
         profileStage.setTitle("Профиль"); // установка названия окна профиля
