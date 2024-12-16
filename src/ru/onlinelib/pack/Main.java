@@ -50,6 +50,7 @@ public class Main extends Application {
 
         Button profileBtn = new Button("Профиль");
 
+        //изменение стиля кнопки
         profileBtn.setMinSize(75,75);
         profileBtn.setMaxSize(75, 75);
         profileBtn.setStyle(
