@@ -43,116 +43,27 @@ public class Main extends Application {
         onlineLibrary.setScene(libraryScene);
 
 
-        Button profileBtn = new Button("Профиль");
-
-        //изменение стиля кнопки
-        profileBtn.setMinSize(75,75);
-        profileBtn.setMaxSize(75, 75);
-        profileBtn.setStyle(
-                "-fx-background-radius: 50%; " + // Скругление углов до круга
-                        "-fx-border-radius: 50%; " +     // Скругление границ до круга
-                        "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                        "-fx-text-fill: white;"          // Цвет текста
-        );
-        // Используем `setOnMousePressed` и `setOnMouseReleased` для изменения цвета при нажатии
-        profileBtn.setOnMousePressed(event -> {
-            profileBtn.setStyle(
-                    "-fx-background-radius: 50%; " + // Скругление углов до круга
-                            "-fx-border-radius: 50%; " +     // Скругление границ до круга
-                            "-fx-background-color: #388E3C; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"
-            );
-        });
-
-        profileBtn.setOnMouseReleased(event -> {
-            profileBtn.setStyle(
-                    "-fx-background-radius: 50%; " + // Скругление углов до круга
-                            "-fx-border-radius: 50%; " +     // Скругление границ до круга
-                            "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"
-            );
-        });
-
-        FlowPane.setMargin(profileBtn, new Insets(10, 0, 0, 10)); // установка отступа сверху на 10, справа 0, снизу 0, слевва 10
+        Button profileBtn = new Button("Профиль"); // создание кнопки профиля
 
 
         search = new TextField(); // создание текстового поля
 
-        search.setPromptText("Введи название книги"); // установка подсказки для текстового поля
 
-        search.setPrefColumnCount(65); // установка длины поисковой строки
-
-        FlowPane.setMargin(search,  new Insets(30, 0, 0, 0)); // установка отступа сверху на 10, справа 0, снизу 0, слевва 0 для поисковой строки
+        Button searchButton1 = new Button("Поиск"); // создание поисковой кнопки
 
 
-        Button searchButton = new Button("Поиск");
+        response = new Label(""); // метка тестовая
 
-        FlowPane.setMargin(searchButton,  new Insets(30, 0, 0, 0)); // установка отступа сверху на 10, справа 0, снизу 0, слевва 0 для кнопки поиска
-
-        searchButton.setStyle(
-                "-fx-background-radius: 5%; " + // Скругление углов
-                        "-fx-border-radius: 5%; " +     // Скругление границ
-                        "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                        "-fx-text-fill: white;"          // Цвет текста
-        );
-        // Используем `setOnMousePressed` и `setOnMouseReleased` для изменения цвета при нажатии
-        searchButton.setOnMousePressed(event -> {
-            searchButton.setStyle(
-                    "-fx-background-radius: 5%; " + // Скругление углов
-                            "-fx-border-radius: 5%; " +     // Скругление границ
-                            "-fx-background-color: #388E3C; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"          // Цвет текста
-            );
-        });
-
-        searchButton.setOnMouseReleased(event -> {
-            searchButton.setStyle(
-                    "-fx-background-radius: 5%; " + // Скругление углов
-                            "-fx-border-radius: 5%; " +     // Скругление границ
-                            "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"          // Цвет текста
-            );
-        });
-
-
-        response = new Label("");
-
-        //получение текста с текстового поля
-        search.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                text = search.getText();
-
-            }
-        });
-
-
-        //реализация поисковой кнопки
-        searchButton.setOnAction(new EventHandler<ActionEvent>() {
-            boolean isTextFieldEmpty = search.getText().isBlank();
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (search.getText().isBlank()) {
-                    return; // Прерываем выполнение обработчика, если поле пустое
-                }
-                if(q == 0)
-                {
-                    response.setText(search.getText());
-                    q++;
-                }
-                if(isTextFieldEmpty)
-                {
-                    search.setText("");
-                    q = 0;
-                }
-
-            }
-        });
 
         Profile profile = new Profile(profileBtn); // получение экземпляра класса окна Профиля
 
-        rootNode.getChildren().addAll(profileBtn, search, searchButton, response);
+        SearchField searchField = new SearchField(search); // получение экземпляра класса поискового поля
+
+        SearchButton searchButton = new SearchButton(searchButton1, search); // получение экземпляра класса поисковой кнопки
+
+        response = searchButton.getResponse();
+
+        rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
 
         //показ подмосток и сцены
         onlineLibrary.show();
