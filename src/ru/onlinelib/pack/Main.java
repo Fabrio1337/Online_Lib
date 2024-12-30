@@ -1,6 +1,7 @@
 package ru.onlinelib.pack;
 
 import javafx.application.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,6 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.*;
 import javafx.scene.layout.*;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Main extends Application {
 
@@ -21,8 +26,30 @@ public class Main extends Application {
 
     private String text;
 
+    public static String connect(String text)
+    {
+        String result = "";
+
+        try (Connection conn = DatabaseConnection.connect()) {
+            if (conn != null) {
+                String query = text; // Замените на ваш SQL-запрос
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    System.out.println("Строка из БД: " + rs.getString("first_name"));
+                    result = rs.getString("first_name");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         System.out.println("Запуск JavaFX-приложения");
+
 
         launch(args);
     }
@@ -32,7 +59,7 @@ public class Main extends Application {
 
     public void start(Stage onlineLibrary)//onlineLibrary - главный подмосток
     {
-
+    	
         onlineLibrary.setTitle("Онлайн библиотека by Fabrio1337"); // установка названия приложения при открытии
 
         FlowPane rootNode = new FlowPane(30, 30); //создание компоновки //граф сцены
@@ -54,6 +81,9 @@ public class Main extends Application {
 
         response = new Label(""); // метка тестовая
 
+        
+        
+
 
         Profile profile = new Profile(profileBtn); // получение экземпляра класса окна Профиля
 
@@ -61,12 +91,15 @@ public class Main extends Application {
 
         SearchButton searchButton = new SearchButton(searchButton1, search); // получение экземпляра класса поисковой кнопки
 
-        response = searchButton.getResponse();
+        response = searchButton.getResponse(); //получение текста из текстового поля
 
+        
         rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
 
         //показ подмосток и сцены
         onlineLibrary.show();
+
+       
     }
 
     public void stop() { }
