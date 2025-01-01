@@ -93,7 +93,7 @@ public class Main extends Application {
 
         response = searchButton.getResponse(); //получение текста из текстового поля
 
-        
+
         rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
 
         //показ подмосток и сцены
