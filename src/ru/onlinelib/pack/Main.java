@@ -26,6 +26,8 @@ public class Main extends Application {
 
     private String text;
 
+    private boolean isLogin = false;
+
     public static String connect(String text)
     {
         String result = "";
@@ -85,16 +87,29 @@ public class Main extends Application {
         
 
 
-        Profile profile = new Profile(profileBtn); // получение экземпляра класса окна Профиля
 
-        SearchField searchField = new SearchField(search); // получение экземпляра класса поискового поля
+
+        SearchField searchField = new SearchField(search, "название книги", 65, 30); // получение экземпляра класса поискового поля
 
         SearchButton searchButton = new SearchButton(searchButton1, search); // получение экземпляра класса поисковой кнопки
+
+
 
         response = searchButton.getResponse(); //получение текста из текстового поля
 
 
-        rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
+
+
+        if(isLogin)
+        {
+            Profile profile = new Profile(profileBtn); // получение экземпляра класса окна Профиля
+            rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
+        }
+        else
+        {
+            RegistrationWindow regWindow = new RegistrationWindow(profileBtn);
+            rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
+        }
 
         //показ подмосток и сцены
         onlineLibrary.show();
