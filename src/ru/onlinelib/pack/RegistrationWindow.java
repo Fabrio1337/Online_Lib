@@ -11,12 +11,61 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+
 
 public class RegistrationWindow {
 
-    private Button authReg = getButton("");
+    private Button authReg = getButton("Регистрация");
+
+    RadioButton auth = new RadioButton("Авторизация"); //переключатель для авторизации
+    RadioButton reg = new RadioButton("Регистрация"); // переключатель для регистрации
+
+    TextField firstName =  new TextField(); // текстовое поле для логина
+
+    TextField pass = new PasswordField(); // текстовое поле для пароля
+
+    private Label response = new Label();
 
     private int k = 0;
+
+    private String first_name;
+    private String password;
+
+    DatabaseConnection db = new DatabaseConnection();
+
+    Connection conn =  db.connect();
+
+    private void dbQuery()
+    {
+       Boolean query = db.databaseQuery(true,conn,"users", first_name, password);
+
+        System.out.println(query);
+    }
+
+    // Метод для установки обработчика в зависимости от выбранного переключателя
+    private void updateAuthRegAction() {
+        if (reg.isSelected()) {
+            authReg.setText("Регистрация");
+        } else if (auth.isSelected()) {
+            authReg.setText("Авторизация");
+        }
+
+        authReg.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                first_name = firstName.getText();
+                password = pass.getText();
+
+                dbQuery();
+
+                firstName.clear();
+                pass.clear();
+            }
+        });
+    }
+
+
 
     RegistrationWindow(Button profileBtn)
     {
@@ -36,9 +85,6 @@ public class RegistrationWindow {
         HBox radioButtons = new HBox(20); // создание сцены для кнопок "Авторизация" и "Регистрация"
         radioButtons.setAlignment(Pos.CENTER);
 
-        RadioButton auth = new RadioButton("Авторизация"); //переключатель для авторизации
-        RadioButton reg = new RadioButton("Регистрация"); // переключатель для регистрации
-
         ToggleGroup tg = new ToggleGroup(); // создание группы переключателей
 
         auth.setToggleGroup(tg); //добавление кнопки авторизации в переключатель
@@ -46,63 +92,27 @@ public class RegistrationWindow {
 
         reg.setSelected(true); //установка автоматического выбора кнопки переключателя
 
-        TextField firstName =  new TextField(); // текстовое поле для логина
-
         SearchField firstNameField = new SearchField(firstName, "логин", 20, 10); //получение экземпляра класса для поля логина
-
-
-        TextField pass = new PasswordField(); // текстовое поле для пароля
 
         SearchField passField = new SearchField(pass, "пароль", 20, 10); //получение экземпляра класса для поля пароля
 
 
-        //изменение стиля кнопки
-        profileBtn.setMinSize(75,75);
-        profileBtn.setMaxSize(75, 75);
-        profileBtn.setStyle(
-                "-fx-background-radius: 50%; " + // Скругление углов до круга
-                        "-fx-border-radius: 50%; " +     // Скругление границ до круга
-                        "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                        "-fx-text-fill: white;"          // Цвет текста
-        );
-        // Используем `setOnMousePressed` и `setOnMouseReleased` для изменения цвета при нажатии
-        profileBtn.setOnMousePressed(event -> {
-            profileBtn.setStyle(
-                    "-fx-background-radius: 50%; " + // Скругление углов до круга
-                            "-fx-border-radius: 50%; " +     // Скругление границ до круга
-                            "-fx-background-color: #388E3C; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"
-            );
-        });
-
-        profileBtn.setOnMouseReleased(event -> {
-            profileBtn.setStyle(
-                    "-fx-background-radius: 50%; " + // Скругление углов до круга
-                            "-fx-border-radius: 50%; " +     // Скругление границ до круга
-                            "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"
-            );
-        });
-
-        FlowPane.setMargin(profileBtn, new Insets(20, 0, 0, 10)); // установка отступа сверху на 10, справа 0, снизу 0, слевва 10
+        ProfileButton profileButton = new ProfileButton(profileBtn);
 
 
 
-
-        // Изменяем текст кнопки в зависимости от выбранного переключателя
-        tg.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (auth.isSelected()) {
-                authReg.setText("Авторизация");
-            } else if (reg.isSelected()) {
-                authReg.setText("Регистрация");
-            }
-        });
 
 
 
         VBox.setMargin(authReg, new Insets(20, 0, 0, 0)); // установка отступа сверху на 20, справа 0, снизу 0, слевва 0 для кнопки поиска
 
+        // Установка начального обработчика
+        updateAuthRegAction();
 
+        // действие переключателя
+        tg.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            updateAuthRegAction();
+        });
 
 
         //реализация кнопки "Профиль"
@@ -118,10 +128,9 @@ public class RegistrationWindow {
             }
         });
 
-
         radioButtons.getChildren().addAll(auth, reg);
 
-        profileNode.getChildren().addAll(firstName, pass,radioButtons, authReg);
+        profileNode.getChildren().addAll(firstName, pass,radioButtons, authReg, response);
     }
 
     //метод для инициализации кнопки

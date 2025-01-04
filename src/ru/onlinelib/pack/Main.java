@@ -28,26 +28,6 @@ public class Main extends Application {
 
     private boolean isLogin = false;
 
-    public static String connect(String text)
-    {
-        String result = "";
-
-        try (Connection conn = DatabaseConnection.connect()) {
-            if (conn != null) {
-                String query = text; // Замените на ваш SQL-запрос
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-
-                while (rs.next()) {
-                    System.out.println("Строка из БД: " + rs.getString("first_name"));
-                    result = rs.getString("first_name");
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
-        }
-        return result;
-    }
 
     public static void main(String[] args) {
         System.out.println("Запуск JavaFX-приложения");
