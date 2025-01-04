@@ -64,7 +64,7 @@ public class Main extends Application {
     	
         onlineLibrary.setTitle("Онлайн библиотека by Fabrio1337"); // установка названия приложения при открытии
 
-        FlowPane rootNode = new FlowPane(30, 30); //создание компоновки //граф сцены
+        FlowPane rootNode = new FlowPane(30, 30); //создание компоновки с отступом по 30 пикселей по горизонтали и вертикали между элементами
 
         Scene libraryScene = new Scene(rootNode, 1000, 600); //создание сцены
 

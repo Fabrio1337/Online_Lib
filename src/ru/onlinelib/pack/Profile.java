@@ -23,7 +23,7 @@ public class Profile {
 
         profileStage.setTitle("Профиль"); // установка названия окна профиля
 
-        VBox profileNode = new VBox(); // граф сцены профиля
+        VBox profileNode = new VBox(10); // граф сцены профиля
 
         profileNode.setAlignment(Pos.TOP_CENTER); // выравнивание всех элементов по центру сверху
 
@@ -42,40 +42,7 @@ public class Profile {
 
         VBox.setMargin(response, new Insets(20, 0, 0, 0)); // установка отступа сверху на 20, справа 0, снизу 0, слевва 0 для кнопки поиска
 
-        Button statisticsButton = new Button("Статистика");
-
-        statisticsButton.setStyle(
-                "-fx-background-radius: 5%; " + // Скругление углов
-                        "-fx-border-radius: 5%; " +     // Скругление границ
-                        "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                        "-fx-text-fill: white;" + // Цвет текста
-                        "-fx-font-size: 20px; " + // размер текста
-                        "-fx-padding: 20px 40px;"// размер кнопки
-        );
-        // Используем `setOnMousePressed` и `setOnMouseReleased` для изменения цвета при нажатии
-        statisticsButton.setOnMousePressed(event -> {
-            statisticsButton.setStyle(
-                    "-fx-background-radius: 5%; " + // Скругление углов
-                            "-fx-border-radius: 5%; " +     // Скругление границ
-                            "-fx-background-color: #388E3C; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;" + // Цвет текста
-                            "-fx-font-size: 20px; " + // размер текста
-                            "-fx-padding: 20px 40px;"// размер кнопки
-            );
-        });
-
-        statisticsButton.setOnMouseReleased(event -> {
-            statisticsButton.setStyle(
-                    "-fx-background-radius: 5%; " + // Скругление углов
-                            "-fx-border-radius: 5%; " +     // Скругление границ
-                            "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;" + // Цвет текста
-                            "-fx-font-size: 20px; " + // размер текста
-                            "-fx-padding: 20px 40px;"// размер кнопки
-            );
-        });
-
-        VBox.setMargin(statisticsButton, new Insets(20, 0, 0, 0)); // установка отступа сверху на 20, справа 0, снизу 0, слевва 0 для кнопки поиска
+        Button statisticsButton = getButton("Статистика");
 
         //изменение стиля кнопки
         profileBtn.setMinSize(75,75);
@@ -128,5 +95,45 @@ public class Profile {
         });
 
         profileNode.getChildren().addAll(response, statisticsButton);
+    }
+
+    //метод для инициализации кнопки
+    private static Button getButton(String text) {
+        Button statisticsButton = new Button(text);
+
+        statisticsButton.setStyle(
+                "-fx-background-radius: 5%; " + // Скругление углов
+                        "-fx-border-radius: 5%; " +     // Скругление границ
+                        "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
+                        "-fx-text-fill: white;" + // Цвет текста
+                        "-fx-font-size: 20px; " + // размер текста
+                        "-fx-padding: 20px 40px;"// размер кнопки
+        );
+        // Используем `setOnMousePressed` и `setOnMouseReleased` для изменения цвета при нажатии
+        statisticsButton.setOnMousePressed(event -> {
+            statisticsButton.setStyle(
+                    "-fx-background-radius: 5%; " + // Скругление углов
+                            "-fx-border-radius: 5%; " +     // Скругление границ
+                            "-fx-background-color: #388E3C; " + // Цвет фона кнопки
+                            "-fx-text-fill: white;" + // Цвет текста
+                            "-fx-font-size: 20px; " + // размер текста
+                            "-fx-padding: 20px 40px;"// размер кнопки
+            );
+        });
+
+        statisticsButton.setOnMouseReleased(event -> {
+            statisticsButton.setStyle(
+                    "-fx-background-radius: 5%; " + // Скругление углов
+                            "-fx-border-radius: 5%; " +     // Скругление границ
+                            "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
+                            "-fx-text-fill: white;" + // Цвет текста
+                            "-fx-font-size: 20px; " + // размер текста
+                            "-fx-padding: 20px 40px;"// размер кнопки
+            );
+        });
+
+        VBox.setMargin(statisticsButton, new Insets(20, 0, 0, 0)); // установка отступа сверху на 20, справа 0, снизу 0, слевва 0 для кнопки поиска
+
+        return statisticsButton;
     }
 }
