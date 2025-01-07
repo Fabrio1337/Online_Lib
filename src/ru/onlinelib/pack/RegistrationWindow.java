@@ -1,5 +1,7 @@
 package ru.onlinelib.pack;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -38,9 +40,19 @@ public class RegistrationWindow {
 
     private static boolean isLog = false;
 
-    public static boolean getIsLog()
+    private BooleanProperty isLogin = new SimpleBooleanProperty(false);
+    public boolean getIsLog()
     {
         return isLog;
+    }
+
+    public BooleanProperty isLogProperty()
+    {
+        return isLogin;
+    }
+    public boolean getIsLogin()
+    {
+        return isLogin.get();
     }
 
     private void dbQuery(boolean whatIsQuery)
@@ -140,16 +152,28 @@ public class RegistrationWindow {
         });
 
 
-        //реализация кнопки "Профиль"
         profileBtn.setOnAction(new EventHandler<ActionEvent>() {
-            boolean isShow = RegStage.isShowing(); // переменная для проверки открыто ли данное окно или нет
+
+            boolean isShow = RegStage.isShowing(); // переменная для проверки, открыто ли окно профиля
+
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(k == 0) { RegStage.show(); } // показываем профиль при нажатии
+                // Открываем окно профиля, если оно ещё не открыто
+                if (k == 0) {
+                    RegStage.show();
+                }
 
                 k++;
 
-                if(!isShow) { k = 0; } // условие для предотвращения создания "клонов" профиля
+                // Если окно закрыто, сбрасываем k, чтобы избежать дублирования
+                if (!isShow) {
+                    k = 0;
+                }
+
+                // Устанавливаем состояние входа
+                if (isLog) {
+                    isLogin.set(true);
+                }
             }
         });
 

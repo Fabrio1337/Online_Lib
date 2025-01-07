@@ -125,7 +125,13 @@ public class Main extends Application {
     private void openReg(Button profileBtn)
     {
         RegistrationWindow regWindow = new RegistrationWindow(profileBtn);
-         isLoggedIn.set(regWindow.getIsLog());
+
+        regWindow.isLogProperty().addListener((observable,oldValue, newValue) -> {
+            if( newValue)
+            {
+                isLoggedIn.set(true);
+            }
+        });
     }
 
 }
