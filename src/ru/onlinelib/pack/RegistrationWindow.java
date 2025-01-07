@@ -36,11 +36,19 @@ public class RegistrationWindow {
 
     Connection conn =  db.connect();
 
-    private void dbQuery()
-    {
-       Boolean query = db.databaseQuery(true,conn,"users", first_name, password);
+    private static boolean isLog = false;
 
-        System.out.println(query);
+    public static boolean getIsLog()
+    {
+        return isLog;
+    }
+
+    private void dbQuery(boolean whatIsQuery)
+    {
+       Boolean query = db.databaseQuery(whatIsQuery,conn,"users", first_name, password);
+
+       isLog = query;
+       System.out.println(query);
     }
 
     // Метод для установки обработчика в зависимости от выбранного переключателя
@@ -57,7 +65,24 @@ public class RegistrationWindow {
                 first_name = firstName.getText();
                 password = pass.getText();
 
-                dbQuery();
+                if(reg.isSelected())
+                {
+                    dbQuery(false);
+                    if(isLog)
+                    {
+                        response.setText("Регистрация прошла успешно");
+                    }
+                    else {
+                        System.out.println("Пользователь с таким именем уже существует");
+                    }
+
+                }
+                else
+                {
+                    dbQuery(true);
+                    response.setText("Вы успешно вошли в аккаунт");
+
+                }
 
                 firstName.clear();
                 pass.clear();

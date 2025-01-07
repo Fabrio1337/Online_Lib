@@ -3,6 +3,8 @@ package ru.onlinelib.pack;
 import javafx.application.*;
 
 import javafx.event.ActionEvent;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.*;
@@ -27,6 +29,9 @@ public class Main extends Application {
     private String text;
 
     private boolean isLogin = false;
+
+    private BooleanProperty isLoggedIn = new SimpleBooleanProperty(false);
+
 
 
     public static void main(String[] args) {
@@ -77,20 +82,19 @@ public class Main extends Application {
 
         response = searchButton.getResponse(); //получение текста из текстового поля
 
+        loadInitialVindow(profileBtn);
 
+        isLoggedIn.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                openProfile(profileBtn);
+            }
+            else {
+                openReg(profileBtn);
+                response.setText(isLoggedIn.getName());
+            }
+        });
 
-
-        if(isLogin)
-        {
-            Profile profile = new Profile(profileBtn); // получение экземпляра класса окна Профиля
-            rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
-        }
-        else
-        {
-            RegistrationWindow regWindow = new RegistrationWindow(profileBtn);
-            rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
-        }
-
+        rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
         //показ подмосток и сцены
         onlineLibrary.show();
 
@@ -98,4 +102,30 @@ public class Main extends Application {
     }
 
     public void stop() { }
+
+    private void loadInitialVindow(Button profilebtn)
+    {
+        if(isLogin)
+        {
+            openProfile(profilebtn);
+        }
+        else
+        {
+            openReg(profilebtn);
+        }
+
+    }
+
+    //код для открытия окна профиля
+    private void openProfile(Button profileBtn)
+    {
+        Profile profile = new Profile(profileBtn);
+    }
+
+    private void openReg(Button profileBtn)
+    {
+        RegistrationWindow regWindow = new RegistrationWindow(profileBtn);
+         isLoggedIn.set(regWindow.getIsLog());
+    }
+
 }
