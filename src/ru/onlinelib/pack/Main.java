@@ -46,7 +46,7 @@ public class Main extends Application {
 
     public void start(Stage onlineLibrary)//onlineLibrary - главный подмосток
     {
-    	
+
         onlineLibrary.setTitle("Онлайн библиотека by Fabrio1337"); // установка названия приложения при открытии
 
         FlowPane rootNode = new FlowPane(30, 30); //создание компоновки с отступом по 30 пикселей по горизонтали и вертикали между элементами
@@ -68,8 +68,8 @@ public class Main extends Application {
 
         response = new Label(""); // метка тестовая
 
-        
-        
+
+
 
 
 
@@ -82,56 +82,18 @@ public class Main extends Application {
 
         response = searchButton.getResponse(); //получение текста из текстового поля
 
-        loadInitialVindow(profileBtn);
-
-        isLoggedIn.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                openProfile(profileBtn);
-            }
-            else {
-                openReg(profileBtn);
-                response.setText(isLoggedIn.getName());
-            }
-        });
+        RegistrationWindow registrationWindow = new RegistrationWindow();
+        registrationWindow.getRegWindow(profileBtn);
 
         rootNode.getChildren().addAll(profileBtn, search, searchButton1, response);
         //показ подмосток и сцены
         onlineLibrary.show();
 
-       
+
     }
 
     public void stop() { }
 
-    private void loadInitialVindow(Button profilebtn)
-    {
-        if(isLogin)
-        {
-            openProfile(profilebtn);
-        }
-        else
-        {
-            openReg(profilebtn);
-        }
 
-    }
-
-    //код для открытия окна профиля
-    private void openProfile(Button profileBtn)
-    {
-        Profile profile = new Profile(profileBtn);
-    }
-
-    private void openReg(Button profileBtn)
-    {
-        RegistrationWindow regWindow = new RegistrationWindow(profileBtn);
-
-        regWindow.isLogProperty().addListener((observable,oldValue, newValue) -> {
-            if( newValue)
-            {
-                isLoggedIn.set(true);
-            }
-        });
-    }
 
 }

@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
+import java.sql.Statement;
 
 
 public class RegistrationWindow {
@@ -27,47 +28,40 @@ public class RegistrationWindow {
 
     TextField pass = new PasswordField(); // текстовое поле для пароля
 
-    private Label response = new Label();
+    public Label response = new Label();
 
-    private int k = 0;
+    private Label title = new Label();
 
-    private String first_name;
+    private static String first_name;
     private String password;
 
     DatabaseConnection db = new DatabaseConnection();
 
     Connection conn =  db.connect();
 
-    private static boolean isLog = false;
+    public static boolean isLog = false;
 
-    private BooleanProperty isLogin = new SimpleBooleanProperty(false);
-    public boolean getIsLog()
+    public String getFirst_name()
     {
-        return isLog;
-    }
-
-    public BooleanProperty isLogProperty()
-    {
-        return isLogin;
-    }
-    public boolean getIsLogin()
-    {
-        return isLogin.get();
+        return  first_name;
     }
 
     private void dbQuery(boolean whatIsQuery)
     {
-       Boolean query = db.databaseQuery(whatIsQuery,conn,"users", first_name, password);
+        Boolean query = db.databaseQuery(whatIsQuery,conn,"users", first_name, password);
 
-       isLog = query;
-       System.out.println(query);
+        isLog = query;
+        //isLogin.set(isLog);
+        System.out.println(query);
     }
 
     // Метод для установки обработчика в зависимости от выбранного переключателя
-    private void updateAuthRegAction() {
+    private void updateAuthRegAction(Button profileBtn, Stage RegStage) {
         if (reg.isSelected()) {
+            title.setText("Регистрация");
             authReg.setText("Регистрация");
         } else if (auth.isSelected()) {
+            title.setText("Авторизация");
             authReg.setText("Авторизация");
         }
 
@@ -86,14 +80,34 @@ public class RegistrationWindow {
                     }
                     else {
                         System.out.println("Пользователь с таким именем уже существует");
+                        response.setText("Пользователь с таким именем уже существует");
                     }
 
                 }
                 else
                 {
                     dbQuery(true);
-                    response.setText("Вы успешно вошли в аккаунт");
+                    if(isLog) {  // Проверяем успешность авторизации
+                        response.setText("Вы успешно вошли в аккаунт");
+                        Profile profile = new Profile(RegistrationWindow.this);  // Сразу создаем профиль
+                        profile.getProfile(profileBtn, RegStage);   // И открываем его
+                        if(!profile.getIsProfile())
+                        {
+                            isLog = false;
+                            if (!RegStage.isShowing()) {
+                                RegStage.show();
+                            }
 
+                        }
+                    } else {
+                        response.setText("Неверный логин или пароль");
+                    }
+
+                }
+
+                if(!RegStage.isShowing())
+                {
+                    response.setText("");
                 }
 
                 firstName.clear();
@@ -102,9 +116,7 @@ public class RegistrationWindow {
         });
     }
 
-
-
-    RegistrationWindow(Button profileBtn)
+    public void getRegWindow(Button profileBtn)
     {
         Stage RegStage = new Stage(); // подмосток для окна регистрации
 
@@ -133,53 +145,61 @@ public class RegistrationWindow {
 
         SearchField passField = new SearchField(pass, "пароль", 20, 10); //получение экземпляра класса для поля пароля
 
-
         ProfileButton profileButton = new ProfileButton(profileBtn);
-
-
-
-
-
 
         VBox.setMargin(authReg, new Insets(20, 0, 0, 0)); // установка отступа сверху на 20, справа 0, снизу 0, слевва 0 для кнопки поиска
 
+        // Применяем стили через setStyle
+        title.setStyle("-fx-font-size: 24px; " +  // Размер текста
+                "-fx-font-weight: bold; " +  // Жирный текст
+                "-fx-text-fill: #4CAF50; " );  // Зеленый цвет текста
+
+        auth.setStyle("-fx-font-size: 12px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill: #4CAF50; ");
+
+        reg.setStyle("-fx-font-size: 12px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-text-fill: #4CAF50; ");
+
         // Установка начального обработчика
-        updateAuthRegAction();
+        updateAuthRegAction(profileBtn, RegStage);
 
         // действие переключателя
         tg.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            updateAuthRegAction();
+            updateAuthRegAction(profileBtn, RegStage);
         });
 
 
         profileBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-            boolean isShow = RegStage.isShowing(); // переменная для проверки, открыто ли окно профиля
-
             @Override
             public void handle(ActionEvent actionEvent) {
-                // Открываем окно профиля, если оно ещё не открыто
-                if (k == 0) {
-                    RegStage.show();
+                if (!isLog) {
+                    // Показываем окно регистрации, если пользователь не вошел
+                    if (!RegStage.isShowing()) {
+                        RegStage.show();
+                    }
+                } else {
+                    // Если пользователь авторизован, открываем профиль
+                    Profile profile = new Profile(RegistrationWindow.this);
+                    profile.getProfile(profileBtn, RegStage);
+                    if(!isLog)
+                    {
+                        RegStage.show();
+                    }
+
                 }
-
-                k++;
-
-                // Если окно закрыто, сбрасываем k, чтобы избежать дублирования
-                if (!isShow) {
-                    k = 0;
-                }
-
-                // Устанавливаем состояние входа
-                if (isLog) {
-                    isLogin.set(true);
+                if(!RegStage.isShowing())
+                {
+                    response.setText("");
                 }
             }
         });
 
+
         radioButtons.getChildren().addAll(auth, reg);
 
-        profileNode.getChildren().addAll(firstName, pass,radioButtons, authReg, response);
+        profileNode.getChildren().addAll(title, firstName, pass,radioButtons, authReg, response);
     }
 
     //метод для инициализации кнопки

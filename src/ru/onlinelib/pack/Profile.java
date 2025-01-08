@@ -1,5 +1,7 @@
 package ru.onlinelib.pack;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,7 +19,24 @@ public class Profile {
     Label response;
 
     private int k = 0;
-    Profile(Button profileBtn)
+
+    private BooleanProperty isProfile = new SimpleBooleanProperty(true);
+
+    RegistrationWindow registrationWindow;
+
+    Profile(RegistrationWindow registrationWindow)
+    {
+        this.registrationWindow = registrationWindow;
+    }
+
+
+    public boolean getIsProfile()
+    {
+        return  isProfile.get();
+    }
+
+
+    public void getProfile(Button profileBtn, Stage RegStage)
     {
         Stage profileStage = new Stage(); // подмосток для окна профиля
 
@@ -34,7 +53,7 @@ public class Profile {
 
         response = new Label();
 
-        response.setText("your name"); // имя которое выводится которое указано в профиле
+        response.setText(registrationWindow.getFirst_name()); // имя которое выводится которое указано в профиле
 
         response.setFont(new Font(24)); //установка размера текста размером 24
 
@@ -44,20 +63,10 @@ public class Profile {
 
         Button statisticsButton = getButton("Статистика");
 
+        Button exitButton = getButton("Выйти");
+
         ProfileButton profileButton = new ProfileButton(profileBtn);
 
-        //реализация кнопки "Профиль"
-        profileBtn.setOnAction(new EventHandler<ActionEvent>() {
-            boolean isShow = profileStage.isShowing(); // переменная для проверки открыто ли данное окно или нет
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if(k == 0) { profileStage.show(); } // показываем профиль при нажатии
-
-                k++;
-
-                if(!isShow) { k = 0; } // условие для предотвращения создания "клонов" профиля
-            }
-        });
 
         statisticsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -66,7 +75,35 @@ public class Profile {
             }
         });
 
-        profileNode.getChildren().addAll(response, statisticsButton);
+        //реализация кнопки "Профиль"
+        profileBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(getIsProfile())
+                {
+                    if(!profileStage.isShowing())
+                    {
+                        profileStage.show();
+                    }
+                }
+                else
+                {
+                    RegistrationWindow.isLog = false;
+                    RegStage.show();
+                    registrationWindow.response.setText("");
+                }
+            }
+        });
+
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                isProfile.set(false);
+                profileStage.close();
+            }
+        });
+
+        profileNode.getChildren().addAll(response, statisticsButton, exitButton);
     }
 
     //метод для инициализации кнопки
@@ -108,4 +145,5 @@ public class Profile {
 
         return statisticsButton;
     }
+
 }
