@@ -23,6 +23,7 @@ public class AddBooks {
     AddBooks(Button addButton)
     {
         SimpleButton MainAddButt = new SimpleButton(addButton);
+        addButton.setAlignment(Pos.BOTTOM_LEFT);
 
         Stage addBookStage = new Stage(); //создание подмостка для добавления книги
         addBookStage.setTitle("Добавление книги");
@@ -33,7 +34,7 @@ public class AddBooks {
 
         booksNode.setAlignment(Pos.TOP_CENTER);
 
-        Scene booksScene = new Scene(booksNode,350, 150); //создание сцены для добавления книги
+        Scene booksScene = new Scene(booksNode,350, 200); //создание сцены для добавления книги
 
         addBookStage.setScene(booksScene);
 
@@ -46,10 +47,18 @@ public class AddBooks {
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(!addBookStage.isShowing())
+                if(Main.getIsLogin())
                 {
-                    addBookStage.show();
+                    if(!addBookStage.isShowing())
+                    {
+                        addBookStage.show();
+                    }
                 }
+                else
+                {
+                    Err err = new Err(addButton);
+                }
+
             }
         });
 

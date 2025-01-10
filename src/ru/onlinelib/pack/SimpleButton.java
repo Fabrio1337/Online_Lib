@@ -20,7 +20,9 @@ public class SimpleButton {
                 "-fx-background-radius: 5%; " + // Скругление углов
                         "-fx-border-radius: 5%; " +     // Скругление границ
                         "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                        "-fx-text-fill: white;"          // Цвет текста
+                        "-fx-text-fill: white;" +         // Цвет текста
+                        "-fx-font-size: 20px; " +
+                        "-fx-padding: 20px 40px;"
         );
         // Используем `setOnMousePressed` и `setOnMouseReleased` для изменения цвета при нажатии
         simpleButton.setOnMousePressed(event -> {
@@ -28,7 +30,9 @@ public class SimpleButton {
                     "-fx-background-radius: 5%; " + // Скругление углов
                             "-fx-border-radius: 5%; " +     // Скругление границ
                             "-fx-background-color: #388E3C; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"          // Цвет текста
+                            "-fx-text-fill: white;" +         // Цвет текста
+                            "-fx-font-size: 20px; " +
+                            "-fx-padding: 20px 40px;"
             );
         });
 
@@ -37,7 +41,9 @@ public class SimpleButton {
                     "-fx-background-radius: 5%; " + // Скругление углов
                             "-fx-border-radius: 5%; " +     // Скругление границ
                             "-fx-background-color: #4CAF50; " + // Цвет фона кнопки
-                            "-fx-text-fill: white;"          // Цвет текста
+                            "-fx-text-fill: white;"  +        // Цвет текста
+                            "-fx-font-size: 20px; " +
+                            "-fx-padding: 20px 40px;"
             );
         });
 

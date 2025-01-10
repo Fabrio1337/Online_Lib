@@ -34,6 +34,11 @@ public class Main extends Application {
         isLoggedIn.set(isLog);
     }
 
+    public static boolean getIsLogin()
+    {
+        return isLoggedIn.get();
+    }
+
 
 
     public static void main(String[] args) {
@@ -61,6 +66,8 @@ public class Main extends Application {
         response = new Label(""); // метка тестовая
 
         Button addBook = new Button("Добавить книгу");
+        addBook.setAlignment(Pos.BOTTOM_LEFT);
+
 
 
         VBox books = new VBox(20); //создание сцены для списка книг
@@ -89,33 +96,10 @@ public class Main extends Application {
         //установливание сцены на подмостки
         onlineLibrary.setScene(libraryScene);
 
-        // Привязываем текст кнопки addBook к значению isLogin
-        addBook.textProperty().bind(
-                isLoggedIn.asString().map(value ->
-                        Boolean.parseBoolean(value) ? "Да" : "Нет"
-                )
-        );
-
-
-
-
-        addBook.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-
-
-                // Привязываем текст кнопки addBook к значению isLogin
-                addBook.textProperty().bind(
-                        isLoggedIn.asString().map(value ->
-                                Boolean.parseBoolean(value) ? "Да" : "Нет"
-                        )
-                );
-            }
-        });
-
 
         AddBooks addBooks = new AddBooks(addBook);
+
+        Err err = new Err(addBook);
 
         SearchField searchField = new SearchField(search, "название книги", 65, 30); // получение экземпляра класса поискового поля
 
@@ -135,11 +119,17 @@ public class Main extends Application {
 
     public void stop() { }
 
-    public void sampleBook()
+    public void sampleBook(Button addBook)
     {
+        addBook.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+
+            }
+        });
 
     }
-
 
 
 }
