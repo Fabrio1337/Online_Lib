@@ -52,7 +52,7 @@ public class RegistrationWindow {
 
         isLog = query;
         //isLogin.set(isLog);
-        System.out.println(query);
+        //System.out.println(query);
     }
 
     // Метод для установки обработчика в зависимости от выбранного переключателя
@@ -91,12 +91,14 @@ public class RegistrationWindow {
                         response.setText("Вы успешно вошли в аккаунт");
                         Profile profile = new Profile(RegistrationWindow.this);  // Сразу создаем профиль
                         profile.getProfile(profileBtn, RegStage);   // И открываем его
+                        Main.setIsLogin(isLog);
                         if(!profile.getIsProfile())
                         {
                             isLog = false;
                             if (!RegStage.isShowing()) {
                                 RegStage.show();
                             }
+                            Main.setIsLogin(isLog);
 
                         }
                     } else {
@@ -175,11 +177,13 @@ public class RegistrationWindow {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (!isLog) {
+                    Main.setIsLogin(isLog);
                     // Показываем окно регистрации, если пользователь не вошел
                     if (!RegStage.isShowing()) {
                         RegStage.show();
                     }
                 } else {
+                    Main.setIsLogin(isLog);
                     // Если пользователь авторизован, открываем профиль
                     Profile profile = new Profile(RegistrationWindow.this);
                     profile.getProfile(profileBtn, RegStage);

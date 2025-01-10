@@ -81,6 +81,7 @@ public class Profile {
             public void handle(ActionEvent actionEvent) {
                 if(getIsProfile())
                 {
+                    Main.setIsLogin(getIsProfile());
                     if(!profileStage.isShowing())
                     {
                         profileStage.show();
@@ -88,6 +89,7 @@ public class Profile {
                 }
                 else
                 {
+                    Main.setIsLogin(getIsProfile());
                     RegistrationWindow.isLog = false;
                     RegStage.show();
                     registrationWindow.response.setText("");
@@ -99,6 +101,7 @@ public class Profile {
             @Override
             public void handle(ActionEvent actionEvent) {
                 isProfile.set(false);
+                Main.setIsLogin(getIsProfile());
                 profileStage.close();
             }
         });
