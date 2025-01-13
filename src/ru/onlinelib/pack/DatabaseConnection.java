@@ -76,6 +76,11 @@ public class DatabaseConnection {
 			}
 
 		}
+		//метод для проверки имеются ли книги в БД
+		public String getBooks()
+		{
+			return "";
+		}
 
 	public boolean databaseQuery(boolean whatIsQuery, Connection conn, String table_name, String first_name, String pass) {
 		if(!whatIsQuery) {
