@@ -92,6 +92,7 @@ public class RegistrationWindow {
                         Profile profile = new Profile(RegistrationWindow.this);  // Сразу создаем профиль
                         profile.getProfile(profileBtn, RegStage);   // И открываем его
                         Main.setIsLogin(isLog);
+
                         if(!profile.getIsProfile())
                         {
                             isLog = false;

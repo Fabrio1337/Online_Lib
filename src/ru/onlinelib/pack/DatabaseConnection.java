@@ -18,6 +18,65 @@ public class DatabaseConnection {
 	        return conn;
 	    }
 
+		public int getUserId(Connection conn)
+		{
+			try
+			{
+				String userQuery = "SELECT userid FROM users";
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(userQuery);
+
+				int userId = -1;
+				if(rs.next())
+				{
+					userId = rs.getInt("userid");
+				}
+				return  userId;
+			}
+			catch (Exception e)
+			{
+				System.out.println("");
+				return -1;
+			}
+		}
+
+		//метод для внесения данных книги в БД
+		public boolean booksQuery(Connection conn, String book_name, String book_url)
+		{
+			int userId = getUserId(conn);
+			try {
+				String checkQuery = "SELECT book_name FROM books WHERE book_name = ?";
+				PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+				checkStmt.setString(1, book_name);
+				ResultSet rs = checkStmt.executeQuery(checkQuery);
+
+				if(rs.next())
+				{
+					System.out.println("Такая книга уже существует");
+					return false;
+				}
+
+
+				String query = "INSERT INTO books(book_name, book_url, userid) VALUES(?, ?, ?)";
+				PreparedStatement insertStatement = conn.prepareStatement(query);
+				insertStatement.setString(1, book_name);
+				insertStatement.setString(2, book_url);
+				insertStatement.setInt(3, userId);
+
+				int rowInserted = insertStatement.executeUpdate();
+
+				System.out.println("Книги внесены в базу данных");
+				return  rowInserted > 0;
+
+			}
+			catch (Exception e)
+			{
+				System.out.println("");
+				return false;
+			}
+
+		}
+
 	public boolean databaseQuery(boolean whatIsQuery, Connection conn, String table_name, String first_name, String pass) {
 		if(!whatIsQuery) {
 			try {
@@ -48,11 +107,14 @@ public class DatabaseConnection {
 			}
 		} else {
 			try {
+				//поиск пользователя в Базе данных
 				String query = "SELECT first_name FROM " + table_name + " WHERE first_name = ? AND pass = ?";
 				PreparedStatement pstmt = conn.prepareStatement(query);
 				pstmt.setString(1, first_name);
 				pstmt.setString(2, pass);
 				ResultSet rs = pstmt.executeQuery();
+
+				getUserId(conn);
 
 				boolean userFound = rs.next();
 				if(userFound) {
